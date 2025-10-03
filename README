@@ -1,0 +1,15 @@
+┌─ Summary ──────────────────────────────────────────────────────────────────┐
+│                                                                            │
+│  An efficient implementation of combinatorial (un)ranking for sampling     │
+│  elements from the general linear group over a finite field. The code      │
+│  is written in C and rely on FLINT (Fast Library for Number Theory) for    │
+│  field arithmetic and linear algebra operations.                           │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+┌─ Usage ────────────────────────────────────────────────────────────────────┐
+│                                                                            │
+│  To run the test suite, issue the command `make test`. This will run a     │
+│  series of randomized tests for the implemented algorithm.                 │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
