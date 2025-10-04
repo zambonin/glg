@@ -1,5 +1,5 @@
-#include "gl.h"
-#include "sspace.h"
+#include "comb/gl.h"
+#include "comb/sspace.h"
 
 void unrank_gl(fq_nmod_mat_t M, const fmpz_t r, const fq_nmod_ctx_t ctx) {
   const ulong n = fq_nmod_mat_nrows(M, ctx);

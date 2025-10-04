@@ -1,5 +1,5 @@
-#include "poly.h"
-#include "vspace.h"
+#include "comb/poly.h"
+#include "comb/vspace.h"
 
 void unrank_vspace(fq_nmod_mat_t v, const fmpz_t r, const fq_nmod_ctx_t ctx) {
   fq_nmod_mat_zero(v, ctx);

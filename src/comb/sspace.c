@@ -1,5 +1,5 @@
-#include "sspace.h"
-#include "vspace.h"
+#include "comb/sspace.h"
+#include "comb/vspace.h"
 #include "util/math.h"
 
 void unrank_subspace(fq_nmod_mat_t v, const fq_nmod_mat_t B, const fmpz_t r,

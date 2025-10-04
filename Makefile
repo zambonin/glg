@@ -2,7 +2,7 @@ CFLAGS = -Wall -pedantic -O3 -march=native -mtune=native -Iinclude
 LDFLAGS = -lflint
 
 SRC = src/test/t-unrank.c
-COMB_SRC = $(wildcard src/*.c)
+COMB_SRC = $(wildcard src/comb/*.c)
 UTIL_SRC = $(wildcard src/util/*.c)
 
 TARGET = $(basename $(SRC))

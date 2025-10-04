@@ -1,4 +1,4 @@
-#include "poly.h"
+#include "comb/poly.h"
 
 void unrank_poly(fq_nmod_t poly, const fmpz_t r, const fq_nmod_ctx_t ctx) {
   const ulong p = fq_nmod_ctx_prime(ctx);
