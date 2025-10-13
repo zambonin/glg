@@ -26,4 +26,9 @@
 │  To run the test suite, issue the command `make test`. This will run a     │
 │  series of randomized tests for each implemented algorithm.                │
 │                                                                            │
+│  To run benchmarks, issue the command `make prof`. This will measure the   │
+│  amount of time and CPU cycles each algorithm takes to run, for some       │
+│  selected parameters used in quantum-safe cryptographic protocols that     │
+│  employ invertible matrices.                                               │
+│                                                                            │
 └────────────────────────────────────────────────────────────────────────────┘
