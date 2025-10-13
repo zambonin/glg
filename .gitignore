@@ -1,4 +1,6 @@
 src/test/t-unrank
 src/test/t-rej
+src/test/t-lu
 src/test/p-unrank
 src/test/p-rej
+src/test/p-lu

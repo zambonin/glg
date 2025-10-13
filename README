@@ -15,6 +15,10 @@
 │    rej                                                                     │
 │      a standard rejection sampling method.                                 │
 │                                                                            │
+│    lu                                                                      │
+│      a method based on LU decomposition that is not a bijection with       │
+│      the target group.                                                     │
+│                                                                            │
 │    unrank                                                                  │
 │      A novel algorithm based on combinatorial ranking which requires       │
 │      only a single integer sampled uniformly at random.                    │

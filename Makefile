@@ -1,7 +1,7 @@
 CFLAGS = -Wall -pedantic -O3 -march=native -mtune=native -Iinclude
 LDFLAGS = -lflint
 
-STRAT = rej unrank
+STRAT = lu rej unrank
 SRC = $(patsubst %,src/test/t-%.c,$(STRAT))
 OBJ = $(SRC:.c=.o)
 TARGETS = $(basename $(SRC))
