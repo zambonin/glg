@@ -1,15 +1,29 @@
 ┌─ Summary ──────────────────────────────────────────────────────────────────┐
 │                                                                            │
-│  An efficient implementation of combinatorial (un)ranking for sampling     │
-│  elements from the general linear group over a finite field. The code      │
-│  is written in C and rely on FLINT (Fast Library for Number Theory) for    │
-│  field arithmetic and linear algebra operations.                           │
+│  This project provides efficient implementations of various algorithms     │
+│  for sampling elements from the general linear group over a finite field.  │
+│  The implementations are written in C and rely on FLINT (Fast Library for  │
+│  Number Theory) for field arithmetic and linear algebra operations.        │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+┌─ Algorithms ───────────────────────────────────────────────────────────────┐
+│                                                                            │
+│  Implementations of the following algorithms to sample from GL(n, q)       │
+│  uniformly at random are included.                                         │
+│                                                                            │
+│    rej                                                                     │
+│      a standard rejection sampling method.                                 │
+│                                                                            │
+│    unrank                                                                  │
+│      A novel algorithm based on combinatorial ranking which requires       │
+│      only a single integer sampled uniformly at random.                    │
 │                                                                            │
 └────────────────────────────────────────────────────────────────────────────┘
 
 ┌─ Usage ────────────────────────────────────────────────────────────────────┐
 │                                                                            │
 │  To run the test suite, issue the command `make test`. This will run a     │
-│  series of randomized tests for the implemented algorithm.                 │
+│  series of randomized tests for each implemented algorithm.                │
 │                                                                            │
 └────────────────────────────────────────────────────────────────────────────┘

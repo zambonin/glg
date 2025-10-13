@@ -1,7 +1,7 @@
 CFLAGS = -Wall -pedantic -O3 -march=native -mtune=native -Iinclude
 LDFLAGS = -lflint
 
-STRAT = unrank
+STRAT = rej unrank
 SRC = $(patsubst %,src/test/t-%.c,$(STRAT))
 OBJ = $(SRC:.c=.o)
 TARGETS = $(basename $(SRC))
@@ -12,7 +12,10 @@ COMB_OBJ = $(COMB_SRC:.c=.o)
 UTIL_OBJ = $(UTIL_SRC:.c=.o)
 
 define COMP_TEST =
-src/test/t-$(1): src/test/t-$(1).o src/$(1).o $$(COMB_OBJ) $$(UTIL_OBJ) \
+ifeq ($(1),unrank)
+	EXTRA_OBJ_$(1) = $$(COMB_OBJ) $$(UTIL_OBJ)
+endif
+src/test/t-$(1): src/test/t-$(1).o src/$(1).o $$(EXTRA_OBJ_$(1)) \
 	src/test/tstub.o
 endef
 
