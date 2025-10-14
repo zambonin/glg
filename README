@@ -19,6 +19,9 @@
 │      a method based on LU decomposition that is not a bijection with       │
 │      the target group.                                                     │
 │                                                                            │
+│    nonsing                                                                 │
+│      NonSing algorithm from [1].                                           │
+│                                                                            │
 │    unrank                                                                  │
 │      A novel algorithm based on combinatorial ranking which requires       │
 │      only a single integer sampled uniformly at random.                    │
@@ -36,3 +39,5 @@
 │  employ invertible matrices.                                               │
 │                                                                            │
 └────────────────────────────────────────────────────────────────────────────┘
+
+[1] https://doi.org/10.1002/rsa.3240040108

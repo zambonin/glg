@@ -1,0 +1,15 @@
+#ifndef UTIL_H
+#define UTIL_H
+
+#include "common.h"
+
+void fq_nmod_mat_randtest_not_zero(fq_nmod_mat_t v, const fq_nmod_ctx_t ctx,
+                                   flint_rand_t state);
+
+slong fq_nmod_mat_first_pos_entry(fq_nmod_mat_t v, const fq_nmod_ctx_t ctx);
+
+void fq_nmod_mat_set_minor(fq_nmod_mat_t mat, const ulong skip_i,
+                           const ulong skip_j, const fq_nmod_mat_t src,
+                           const fq_nmod_ctx_t ctx);
+
+#endif // UTIL_H

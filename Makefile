@@ -1,7 +1,7 @@
 CFLAGS = -Wall -pedantic -O3 -march=native -mtune=native -Iinclude
 LDFLAGS = -lflint
 
-STRAT = lu rej unrank
+STRAT = lu nonsing rej unrank
 SRC = $(patsubst %,src/test/t-%.c,$(STRAT))
 OBJ = $(SRC:.c=.o)
 TARGETS = $(basename $(SRC))
@@ -18,16 +18,16 @@ define COMP_TEST =
 ifeq ($(1),unrank)
 	EXTRA_OBJ_$(1) = $$(COMB_OBJ) $$(UTIL_OBJ)
 endif
-src/test/t-$(1): src/test/t-$(1).o src/$(1).o $$(EXTRA_OBJ_$(1)) \
-	src/test/tstub.o
+src/test/t-$(1): src/test/t-$(1).o src/$(1).o src/util/fq_nmod_mat_extra.o \
+	$$(EXTRA_OBJ_$(1)) src/test/tstub.o
 endef
 
 define COMP_PROF =
 ifeq ($(1),unrank)
 	EXTRA_OBJ_$(1) = $$(COMB_OBJ) $$(UTIL_OBJ)
 endif
-src/test/p-$(1): src/test/p-$(1).o src/$(1).o $$(EXTRA_OBJ_$(1)) \
-	src/test/pstub.o
+src/test/p-$(1): src/test/p-$(1).o src/$(1).o src/util/fq_nmod_mat_extra.o \
+	$$(EXTRA_OBJ_$(1)) src/test/pstub.o
 endef
 
 define RUN_TEST =
