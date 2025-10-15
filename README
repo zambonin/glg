@@ -22,6 +22,9 @@
 │    nonsing                                                                 │
 │      NonSing algorithm from [1].                                           │
 │                                                                            │
+│    subgroup                                                                │
+│      The general subgroup algorithm from [2].                              │
+│                                                                            │
 │    unrank                                                                  │
 │      A novel algorithm based on combinatorial ranking which requires       │
 │      only a single integer sampled uniformly at random.                    │
@@ -41,3 +44,4 @@
 └────────────────────────────────────────────────────────────────────────────┘
 
 [1] https://doi.org/10.1002/rsa.3240040108
+[2] https://doi.org/10.1017/S0269964800000255

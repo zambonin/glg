@@ -12,4 +12,7 @@ void fq_nmod_mat_set_minor(fq_nmod_mat_t mat, const ulong skip_i,
                            const ulong skip_j, const fq_nmod_mat_t src,
                            const fq_nmod_ctx_t ctx);
 
+void fq_nmod_mat_scalar_mul(fq_nmod_mat_t B, const fq_nmod_mat_t A,
+                            const fq_nmod_t c, const fq_nmod_ctx_t ctx);
+
 #endif // UTIL_H

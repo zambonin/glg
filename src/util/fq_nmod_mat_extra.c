@@ -29,3 +29,13 @@ void fq_nmod_mat_set_minor(fq_nmod_mat_t mat, const ulong skip_i,
     }
   }
 }
+
+void fq_nmod_mat_scalar_mul(fq_nmod_mat_t B, const fq_nmod_mat_t A,
+                            const fq_nmod_t c, const fq_nmod_ctx_t ctx) {
+  for (slong i = 0; i < A->r; ++i) {
+    for (slong j = 0; j < A->c; ++j) {
+      fq_nmod_mul(fq_nmod_mat_entry(B, i, j), fq_nmod_mat_entry(A, i, j), c,
+                  ctx);
+    }
+  }
+}
