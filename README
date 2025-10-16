@@ -25,6 +25,9 @@
 │    subgroup                                                                │
 │      The general subgroup algorithm from [2].                              │
 │                                                                            │
+│    schubert                                                                │
+│      Algorithm 5.3.2 from [3], based on sampling Schubert cells.           │
+│                                                                            │
 │    unrank                                                                  │
 │      A novel algorithm based on combinatorial ranking which requires       │
 │      only a single integer sampled uniformly at random.                    │
@@ -45,3 +48,4 @@
 
 [1] https://doi.org/10.1002/rsa.3240040108
 [2] https://doi.org/10.1017/S0269964800000255
+[3] https://doi.org/10.1090/dimacs/043/12
