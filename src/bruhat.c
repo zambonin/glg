@@ -2,6 +2,7 @@
 
 #include <flint/perm.h>
 
+#include "util/fq_nmod_mat_extra.h"
 #include "bruhat.h"
 
 void bruhat(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
@@ -49,7 +50,7 @@ void bruhat(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
     fmpz_add(total, total, q_pow_i);
     fmpz_mul(q_pow_i, q_pow_i, q);
 
-    fmpz_randm(r, state, total);
+    fmpz_randlimb_m(r, state, total);
     fmpz_zero(acc_weight);
 
     slong j = -1;

@@ -47,6 +47,10 @@
 │  selected parameters used in quantum-safe cryptographic protocols that     │
 │  employ invertible matrices.                                               │
 │                                                                            │
+│  The `test-c` and `prof-c` targets are also available for running tests    │
+│  and profiling with a counter for `n_randlimb` calls, using `LD_PRELOAD`.  │
+│  This allows measuring the amount of random bits used by each algorithm.   │
+│                                                                            │
 └────────────────────────────────────────────────────────────────────────────┘
 
 [1] https://doi.org/10.1002/rsa.3240040108

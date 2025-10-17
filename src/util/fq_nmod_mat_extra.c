@@ -39,3 +39,16 @@ void fq_nmod_mat_scalar_mul(fq_nmod_mat_t B, const fq_nmod_mat_t A,
     }
   }
 }
+
+void fmpz_randlimb_m(fmpz_t f, flint_rand_t state, const fmpz_t m) {
+  fmpz_zero(f);
+  const slong limbs = fmpz_size(m);
+  ulong l[limbs];
+
+  for (slong i = 0; i < limbs; ++i) {
+    l[i] = n_randlimb(state);
+  }
+
+  fmpz_set_signed_ui_array(f, l, limbs);
+  fmpz_mod(f, f, m);
+}

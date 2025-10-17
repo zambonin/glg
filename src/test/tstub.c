@@ -9,6 +9,11 @@
 
 #include "test/stub.h"
 
+extern void reset_cnt(void);
+extern void norm_cnt(uint32_t);
+extern void print_cnt(void);
+extern void find_cnt(void);
+
 static const struct option long_options[] = {
     {"iterations", required_argument, 0, 'i'},
     {"seed", required_argument, 0, 's'},
@@ -29,15 +34,15 @@ void run_suite(uint32_t iterations, flint_rand_t state, sample_gl_func sample) {
 
     const slong p = fq_nmod_ctx_prime(ctx);
     const ulong d = fq_nmod_ctx_degree(ctx);
-    const ulong n = 1 + n_urandint(state, 1 << 5);
-
-    printf("p = %3ld, d = %3ld, n = %3ld\n", p, d, n);
+    const ulong n = 2 + n_urandint(state, 1 << 5);
 
     fq_nmod_mat_t M;
     fq_nmod_mat_init(M, n, n, ctx);
 
     fq_nmod_mat_t inv;
     fq_nmod_mat_init(inv, n, n, ctx);
+
+    reset_cnt();
 
     for (uint32_t j = 0; j < iterations; ++j) {
       fq_nmod_mat_zero(M, ctx);
@@ -46,6 +51,11 @@ void run_suite(uint32_t iterations, flint_rand_t state, sample_gl_func sample) {
 
       assert(fq_nmod_mat_inv(inv, M, ctx));
     }
+
+    printf("p = %4ld, d = %3ld, n = %3ld", p, d, n);
+    norm_cnt(iterations);
+    print_cnt();
+    printf("\n");
 
     fq_nmod_mat_clear(inv, ctx);
     fq_nmod_mat_clear(M, ctx);
@@ -80,6 +90,8 @@ int32_t main_stub(int32_t argc, char **argv, sample_gl_func f) {
   flint_rand_init(state);
 
   state->__randval = seed;
+
+  find_cnt();
 
   run_suite(iterations, state, f);
 

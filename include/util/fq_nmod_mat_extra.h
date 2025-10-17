@@ -15,4 +15,6 @@ void fq_nmod_mat_set_minor(fq_nmod_mat_t mat, const ulong skip_i,
 void fq_nmod_mat_scalar_mul(fq_nmod_mat_t B, const fq_nmod_mat_t A,
                             const fq_nmod_t c, const fq_nmod_ctx_t ctx);
 
+void fmpz_randlimb_m(fmpz_t f, flint_rand_t state, const fmpz_t m);
+
 #endif // UTIL_H

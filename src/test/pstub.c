@@ -8,6 +8,11 @@
 #include "common.h"
 #include "test/stub.h"
 
+extern void reset_cnt(void);
+extern void norm_cnt(uint32_t);
+extern void print_cnt(void);
+extern void find_cnt(void);
+
 static const uint32_t NS_TO_SEC = 1000000000;
 
 static const struct option long_options[] = {
@@ -96,7 +101,7 @@ void print_perf_stats(const fq_nmod_ctx_t ctx, const ulong n, const uint32_t it,
   const slong p = fq_nmod_ctx_prime(ctx);
   const ulong d = fq_nmod_ctx_degree(ctx);
   printf(
-      "p = %8lu, d = %2lu, n = %3lu, i = %5u, avg = %14.2Lf ns, %14.2Lf cyc.\n",
+      "p = %8lu, d = %2lu, n = %3lu, i = %5u, avg = %14.2Lf ns, %14.2Lf cyc.",
       p, d, n, it, time / it, cycles / it);
 }
 
@@ -125,6 +130,8 @@ void run_suite(uint32_t iterations, flint_rand_t state, sample_gl_func sample) {
       assert(fq_nmod_mat_inv(inv, M, *ctx));
     }
 
+    reset_cnt();
+
     for (uint32_t j = 0; j < iterations; ++j) {
       fq_nmod_mat_zero(M, *ctx);
 
@@ -134,6 +141,9 @@ void run_suite(uint32_t iterations, flint_rand_t state, sample_gl_func sample) {
     }
 
     print_perf_stats(*ctx, n, iterations, total_time, total_cycles);
+    norm_cnt(iterations);
+    print_cnt();
+    printf("\n");
 
     fq_nmod_mat_clear(inv, *ctx);
     fq_nmod_mat_clear(M, *ctx);
@@ -169,6 +179,8 @@ int32_t main_stub(int32_t argc, char **argv, sample_gl_func f) {
   state->__randval = seed;
 
   init_all_fq_nmod_ctx_t();
+
+  find_cnt();
 
   run_suite(iterations, state, f);
 
