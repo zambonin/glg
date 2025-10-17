@@ -25,6 +25,9 @@
 │    subgroup                                                                │
 │      The general subgroup algorithm from [2].                              │
 │                                                                            │
+│    bruhat                                                                  │
+│      Algorithm 5.4.3 from [3], based on Bruhat decomposition.              │
+│                                                                            │
 │    schubert                                                                │
 │      Algorithm 5.3.2 from [3], based on sampling Schubert cells.           │
 │                                                                            │
