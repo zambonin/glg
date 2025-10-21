@@ -6,14 +6,12 @@ SRC = $(patsubst %,src/test/t-%.c,$(STRAT))
 OBJ = $(SRC:.c=.o)
 
 COMB_SRC = $(wildcard src/comb/*.c)
-UTIL_SRC = $(wildcard src/util/*.c)
 COMB_OBJ = $(COMB_SRC:.c=.o)
-UTIL_OBJ = $(UTIL_SRC:.c=.o)
 TARGETS = $(basename $(SRC))
 
 define INNER =
 ifeq ($(1),unrank)
-	EXTRA_OBJ_$(1) = $$(COMB_OBJ) $$(UTIL_OBJ)
+	EXTRA_OBJ_$(1) = $$(COMB_OBJ) src/util/math.o
 endif
 src/test/$(2)$(3)-$(1): src/test/$(2)$(3)-$(1).o src/$(1).o $$(EXTRA_OBJ_$(1)) \
 	src/util/fq_nmod_mat_extra.o src/test/$(3)stub.o src/test/$(2)stub.o
@@ -46,6 +44,8 @@ default:
 src/test/rndcnt.so: src/test/rndcnt.c
 	$(CC) -shared -fPIC -o $@ $<
 
+src/util/enum: src/util/enum.o $(COMB_OBJ) src/util/math.o
+
 $(eval $(call OUTER,test,t,e))
 $(eval $(call OUTER,test-c,t,c))
 $(eval $(call OUTER,prof,p,e))
@@ -53,4 +53,4 @@ $(eval $(call OUTER,prof-c,p,c))
 
 clean: clean-te clean-tc clean-pe clean-pc
 	$(RM) $(TARGETS) $(wildcard src/*.o) $(wildcard src/**/*.o) \
-		src/test/rndcnt.so
+		src/test/rndcnt.so src/util/enum
