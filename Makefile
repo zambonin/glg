@@ -19,8 +19,7 @@ src/test/$(2)$(3)-$(1): src/test/$(2)$(3)-$(1).o src/$(1).o $$(EXTRA_OBJ_$(1)) \
 
 ifeq ($(3),c)
 $(2)$(3)-$(1): src/test/$(2)$(3)-$(1) src/test/rndcnt.so
-	@LD_PRELOAD=src/test/rndcnt.so ./$$<
-	@echo "[ OK ] $(1)"
+	@LD_PRELOAD=src/test/rndcnt.so ./$$< | sed 's/$$$$/, alg = $(1)/g'
 else
 $(2)$(3)-$(1): src/test/$(2)$(3)-$(1)
 	@./$$<

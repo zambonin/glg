@@ -88,9 +88,8 @@ void print_perf_stats(const fq_nmod_ctx_t ctx, const ulong n, const uint32_t it,
                       const long double time, const long double cycles) {
   const slong p = fq_nmod_ctx_prime(ctx);
   const ulong d = fq_nmod_ctx_degree(ctx);
-  printf(
-      "p = %8lu, d = %2lu, n = %3lu, i = %5u, avg = %14.2Lf us, %14.2Lf cyc.",
-      p, d, n, it, time / it, cycles / it);
+  printf("p = %8lu, d = %2lu, n = %3lu, i = %5u, avg_time_us = %14.2Lf, "
+         "avg_cycles = %14.2Lf", p, d, n, it, time / it, cycles / it);
 }
 
 void run_suite(uint32_t iterations, flint_rand_t state, sample_gl_func sample) {
