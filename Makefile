@@ -1,4 +1,5 @@
-CFLAGS = -Wall -pedantic -O3 -march=native -mtune=native -Iinclude
+CFLAGS = -Wall -pedantic -O3 -march=native -mtune=native -Iinclude \
+		 -DCLK_SPEED=$(shell cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq)
 LDFLAGS = -lflint
 
 STRAT = bruhat lu nonsing rej schubert subgroup unrank

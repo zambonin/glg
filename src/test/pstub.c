@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <flint/profiler.h>
+
 #include "common.h"
 #include "test/stub.h"
 
@@ -12,8 +14,6 @@ extern void reset_cnt(void);
 extern void norm_cnt(uint32_t);
 extern void print_cnt(void);
 extern void find_cnt(void);
-
-static const uint32_t NS_TO_SEC = 1000000000;
 
 static const struct option long_options[] = {
     {"iterations", required_argument, 0, 'i'},
@@ -29,28 +29,16 @@ static const char *help_text =
     "         Set the seed for the random number generator.\n";
 
 #define PERF(total_time, total_cycles, logic, var)                             \
-  struct timespec var##_tstart;                                                \
-  struct timespec var##_tstop;                                                 \
-                                                                               \
-  clock_gettime(CLOCK_MONOTONIC_RAW, &var##_tstart);                           \
-  uint64_t var##_cstart = cycles();                                            \
+  prof_start();                                                                \
+  double var##_cstart = get_cycle_counter();                                   \
                                                                                \
   logic;                                                                       \
                                                                                \
-  uint64_t var##_cstop = cycles();                                             \
-  clock_gettime(CLOCK_MONOTONIC_RAW, &var##_tstop);                            \
+  double var##_cstop = get_cycle_counter();                                    \
+  prof_stop();                                                                 \
                                                                                \
-  total_time +=                                                                \
-      (long double)(var##_tstop.tv_sec - var##_tstart.tv_sec) * NS_TO_SEC +    \
-      (long double)(var##_tstop.tv_nsec - var##_tstart.tv_nsec);               \
+  total_time += get_clock(0) * FLINT_CLOCKSPEED / (CLK_SPEED * 1000.0);        \
   total_cycles += var##_cstop - var##_cstart;
-
-uint64_t cycles(void) {
-  uint64_t result = 0;
-  __asm volatile(".byte 15;.byte 49;shlq $32,%%rdx;orq %%rdx,%%rax"
-                 : "=a"(result)::"%rdx");
-  return result;
-}
 
 typedef struct {
   const fq_nmod_ctx_t *ctx;
@@ -101,7 +89,7 @@ void print_perf_stats(const fq_nmod_ctx_t ctx, const ulong n, const uint32_t it,
   const slong p = fq_nmod_ctx_prime(ctx);
   const ulong d = fq_nmod_ctx_degree(ctx);
   printf(
-      "p = %8lu, d = %2lu, n = %3lu, i = %5u, avg = %14.2Lf ns, %14.2Lf cyc.",
+      "p = %8lu, d = %2lu, n = %3lu, i = %5u, avg = %14.2Lf us, %14.2Lf cyc.",
       p, d, n, it, time / it, cycles / it);
 }
 
@@ -179,6 +167,8 @@ int32_t main_stub(int32_t argc, char **argv, sample_gl_func f) {
   state->__randval = seed;
 
   init_all_fq_nmod_ctx_t();
+
+  init_clock(0);
 
   find_cnt();
 
