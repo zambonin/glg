@@ -8,15 +8,14 @@ void unrank_poly(fq_nmod_t poly, const fmpz_t r, const fq_nmod_ctx_t ctx) {
   fmpz_t rp;
   fmpz_init_set(rp, r);
 
-  fmpz_t rem;
-  fmpz_init(rem);
-
   for (slong j = 0; j < d; ++j) {
-    nmod_poly_set_coeff_ui(poly, j, fmpz_mod_ui(rem, rp, p));
+    if (fmpz_is_zero(rp)) {
+      break;
+    }
+    nmod_poly_set_coeff_ui(poly, j, fmpz_fdiv_ui(rp, p));
     fmpz_fdiv_q_ui(rp, rp, p);
   }
 
-  fmpz_clear(rem);
   fmpz_clear(rp);
 }
 

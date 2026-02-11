@@ -1,5 +1,5 @@
-#ifndef UTIL_H
-#define UTIL_H
+#ifndef FQ_NMOD_MAT_EXTRA_H
+#define FQ_NMOD_MAT_EXTRA_H
 
 #include "common.h"
 
@@ -17,4 +17,4 @@ void fq_nmod_mat_scalar_mul(fq_nmod_mat_t B, const fq_nmod_mat_t A,
 
 void fmpz_randlimb_m(fmpz_t f, flint_rand_t state, const fmpz_t m);
 
-#endif // UTIL_H
+#endif // FQ_NMOD_MAT_EXTRA_H

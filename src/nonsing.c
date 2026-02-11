@@ -1,5 +1,5 @@
-#include "util/fq_nmod_mat_extra.h"
 #include "nonsing.h"
+#include "util/fq_nmod_mat_extra.h"
 
 void inner_nonsing(fq_nmod_mat_t A, fq_nmod_mat_t T, const fq_nmod_ctx_t ctx,
                    flint_rand_t state) {

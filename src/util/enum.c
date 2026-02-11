@@ -4,9 +4,9 @@
 #include <stdlib.h>
 
 #include "comb/gl.h"
+#include "comb/poly.h"
 #include "common.h"
 #include "util/math.h"
-#include "comb/poly.h"
 
 static const struct option long_options[] = {
     {"characteristic", required_argument, 0, 'p'},

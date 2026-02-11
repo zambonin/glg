@@ -1,7 +1,7 @@
-#include "comb/gl.h"
-#include "util/math.h"
-#include "util/fq_nmod_mat_extra.h"
 #include "unrank.h"
+#include "comb/gl.h"
+#include "util/fq_nmod_mat_extra.h"
+#include "util/math.h"
 
 void unrank(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
   fmpz_t count;

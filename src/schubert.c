@@ -2,8 +2,8 @@
 
 #include <flint/perm.h>
 
-#include "util/fq_nmod_mat_extra.h"
 #include "schubert.h"
+#include "util/fq_nmod_mat_extra.h"
 
 void schubert(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
   const slong n = fq_nmod_mat_nrows(M, ctx);
