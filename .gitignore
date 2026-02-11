@@ -2,3 +2,4 @@ src/test/te-*
 src/test/tc-*
 src/test/pc-*
 src/test/pe-*
+libglg.a
