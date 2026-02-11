@@ -15,10 +15,6 @@
 │    rej                                                                     │
 │      a standard rejection sampling method.                                 │
 │                                                                            │
-│    lu                                                                      │
-│      a method based on LU decomposition that is not a bijection with       │
-│      the target group.                                                     │
-│                                                                            │
 │    nonsing                                                                 │
 │      NonSing algorithm from [1].                                           │
 │                                                                            │
