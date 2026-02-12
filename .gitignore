@@ -2,4 +2,5 @@ src/test/te-*
 src/test/tc-*
 src/test/pc-*
 src/test/pe-*
+src/test/t-roundtrip
 libglg.a

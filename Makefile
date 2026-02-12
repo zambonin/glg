@@ -47,6 +47,14 @@ src/test/rndcnt.so: src/test/rndcnt.c
 
 src/util/enum: src/util/enum.o $(LIB_TARGET)
 
+src/test/t-roundtrip: src/test/t-roundtrip.o $(LIB_TARGET)
+
+roundtrip: src/test/t-roundtrip
+	@./$<
+	@echo "[ OK ] roundtrip"
+
+test: roundtrip
+
 $(eval $(call OUTER,test,t,e))
 $(eval $(call OUTER,test-c,t,c))
 $(eval $(call OUTER,prof,p,e))
@@ -54,4 +62,4 @@ $(eval $(call OUTER,prof-c,p,c))
 
 clean: clean-te clean-tc clean-pe clean-pc
 	$(RM) $(TARGETS) $(wildcard src/*.o) $(wildcard src/**/*.o) \
-		src/test/rndcnt.so src/util/enum $(LIB_TARGET)
+		src/test/rndcnt.so src/test/t-roundtrip src/util/enum $(LIB_TARGET)
