@@ -28,6 +28,11 @@ void unrank_gl(fq_nmod_mat_t M, const fmpz_t r, const fq_nmod_ctx_t ctx) {
   fq_nmod_mat_t v;
   fq_nmod_mat_init(v, n, 1, ctx);
 
+  slong *J = flint_malloc(n * sizeof(slong));
+  for (ulong i = 0; i < (slong)n; ++i) {
+    J[i] = i;
+  }
+
   for (ulong i = 0; i < n; ++i) {
     fmpz_zero(k);
     fmpz_sub(count, q_pow_n, q_pow_i);
@@ -38,18 +43,27 @@ void unrank_gl(fq_nmod_mat_t M, const fmpz_t r, const fq_nmod_ctx_t ctx) {
       fmpz_set(k, rp);
     }
 
+    slong m_last;
+
     fq_nmod_mat_t B;
     fq_nmod_mat_window_init(B, M, 0, 0, n, i, ctx);
-    unrank_subspace(v, B, k, ctx);
+    unrank_subspace_pivots(v, (i == 0) ? NULL : B, J, n - i, k, ctx, &m_last);
     fq_nmod_mat_window_clear(B, ctx);
 
     for (ulong j = 0; j < n; ++j) {
       fq_nmod_set(fq_nmod_mat_entry(M, j, i), fq_nmod_mat_entry(v, j, 0), ctx);
     }
 
+    if (m_last >= 0) {
+      for (slong m = m_last; m < (slong)(n - i - 1); ++m) {
+        J[m] = J[m + 1];
+      }
+    }
+
     fmpz_mul(q_pow_i, q_pow_i, q);
   }
 
+  flint_free(J);
   fq_nmod_mat_clear(v, ctx);
   fmpz_clear(k);
   fmpz_clear(count);
@@ -86,6 +100,11 @@ void rank_gl(fmpz_t r, const fq_nmod_mat_t M, const fq_nmod_ctx_t ctx) {
   fq_nmod_mat_t v;
   fq_nmod_mat_init(v, n, 1, ctx);
 
+  slong *J = flint_malloc(n * sizeof(slong));
+  for (slong i = 0; i < (slong)n; ++i) {
+    J[i] = i;
+  }
+
   for (ulong i = 0; i < n; ++i) {
     fmpz_zero(k);
     fmpz_zero(count);
@@ -94,17 +113,27 @@ void rank_gl(fmpz_t r, const fq_nmod_mat_t M, const fq_nmod_ctx_t ctx) {
       fq_nmod_set(fq_nmod_mat_entry(v, j, 0), fq_nmod_mat_entry(M, j, i), ctx);
     }
 
+    slong m_last;
+
     fq_nmod_mat_t B;
     fq_nmod_mat_window_init(B, M, 0, 0, n, i, ctx);
-    rank_subspace(k, v, B, ctx);
+    rank_subspace_pivots(k, v, (i == 0) ? NULL : B, J, n - i, ctx, &m_last);
     fq_nmod_mat_window_clear(B, ctx);
 
     fmpz_addmul(r, k, acc);
     fmpz_sub(count, q_pow_n, q_pow_i);
     fmpz_mul(acc, acc, count);
+
+    if (m_last >= 0) {
+      for (slong m = m_last; m < (slong)(n - i - 1); ++m) {
+        J[m] = J[m + 1];
+      }
+    }
+
     fmpz_mul(q_pow_i, q_pow_i, q);
   }
 
+  flint_free(J);
   fq_nmod_mat_clear(v, ctx);
   fmpz_clear(k);
   fmpz_clear(count);
