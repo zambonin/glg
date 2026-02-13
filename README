@@ -12,20 +12,20 @@
 │  Implementations of the following algorithms to sample from GL(n, q)       │
 │  uniformly at random are included.                                         │
 │                                                                            │
-│    rej                                                                     │
-│      a standard rejection sampling method.                                 │
+│    bruhat                                                                  │
+│      Algorithm 5.4.3 from [3], based on Bruhat decomposition.              │
 │                                                                            │
 │    nonsing                                                                 │
 │      NonSing algorithm from [1].                                           │
 │                                                                            │
-│    subgroup                                                                │
-│      The general subgroup algorithm from [2].                              │
-│                                                                            │
-│    bruhat                                                                  │
-│      Algorithm 5.4.3 from [3], based on Bruhat decomposition.              │
+│    rej                                                                     │
+│      a standard rejection sampling method.                                 │
 │                                                                            │
 │    schubert                                                                │
 │      Algorithm 5.3.2 from [3], based on sampling Schubert cells.           │
+│                                                                            │
+│    subgroup                                                                │
+│      The general subgroup algorithm from [2].                              │
 │                                                                            │
 │    unrank                                                                  │
 │      A novel algorithm based on combinatorial ranking which requires       │
@@ -47,11 +47,15 @@
 │  and profiling with a counter for `n_randlimb` calls, using `LD_PRELOAD`.  │
 │  This allows measuring the amount of random bits used by each algorithm.   │
 │                                                                            │
+│  The `CHUNK_SIZE` variable can be used to control the minimum size of a    │
+│  word emitted by `n_randlimb`, with buffering implemented via the FDR      │
+│  algorithm [4].                                                            │
+│                                                                            │
 │  The `fmt-table.sh` script can be used to pretty-print tables with ratios  │
 │  for CPU cycles and amount of random bits with respect to the ``best''     │
 │  algorithm. For instance, issue the command                                │
 │                                                                            │
-│    make --silent clean prof-c | sh fmt-table.sh -l                         │
+│    sh fmt-table.sh -l                                                      │
 │                                                                            │
 │  to create a table with information on the amount of limbs.                │
 │                                                                            │
@@ -60,3 +64,4 @@
 [1] https://doi.org/10.1002/rsa.3240040108
 [2] https://doi.org/10.1017/S0269964800000255
 [3] https://doi.org/10.1090/dimacs/043/12
+[4] https://arxiv.org/abs/1304.1916v1
