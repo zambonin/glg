@@ -11,7 +11,7 @@ long double n_randlimb_count = 0;
 
 mp_limb_t n_randlimb(flint_rand_t state) {
   if (!n_randlimb_func) {
-    n_randlimb_func = dlsym(RTLD_NEXT, "n_randlimb");
+    *(void **)(&n_randlimb_func) = dlsym(RTLD_NEXT, "n_randlimb");
   }
 
   ++n_randlimb_count;

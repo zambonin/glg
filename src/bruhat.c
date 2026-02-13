@@ -4,11 +4,17 @@
 
 #include "bruhat.h"
 #include "util/fq_nmod_mat_extra.h"
+#include "util/rand.h"
 
 void bruhat(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
   const slong n = fq_nmod_mat_nrows(M, ctx);
+
+  bit_buffer_t buf;
+  bit_buffer_init(&buf, state);
+
   if (n == 1) {
-    fq_nmod_rand_not_zero(fq_nmod_mat_entry(M, 0, 0), state, ctx);
+    fq_nmod_mat_entry_rand_not_zero_buf(M, 0, 0, ctx, &buf);
+    bit_buffer_clear(&buf);
     return;
   }
 
@@ -50,7 +56,7 @@ void bruhat(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
     fmpz_add(total, total, q_pow_i);
     fmpz_mul(q_pow_i, q_pow_i, q);
 
-    fmpz_randlimb_m(r, state, total);
+    fast_dice_roller(r, total, &buf);
     fmpz_zero(acc_weight);
 
     slong j = -1;
@@ -73,10 +79,10 @@ void bruhat(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
     fq_nmod_one(fq_nmod_mat_entry(D, i, sigma[i]), ctx);
   }
 
-  fq_nmod_mat_randtriu(B1, state, 0, ctx);
+  fq_nmod_mat_randtriu_buf(B1, ctx, &buf, 1);
   fq_nmod_mat_transpose(B1, B1, ctx);
 
-  fq_nmod_mat_randtriu(B2, state, 0, ctx);
+  fq_nmod_mat_randtriu_buf(B2, ctx, &buf, 0);
 
   fq_nmod_mat_mul(Mp, B1, D, ctx);
 
@@ -93,4 +99,5 @@ void bruhat(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
   fmpz_clear(q_pow_i);
   fmpz_clear(q);
   _perm_clear(sigma);
+  bit_buffer_clear(&buf);
 }

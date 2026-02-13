@@ -4,11 +4,17 @@
 
 #include "schubert.h"
 #include "util/fq_nmod_mat_extra.h"
+#include "util/rand.h"
 
 void schubert(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
   const slong n = fq_nmod_mat_nrows(M, ctx);
+
+  bit_buffer_t buf;
+  bit_buffer_init(&buf, state);
+
   if (n == 1) {
-    fq_nmod_rand_not_zero(fq_nmod_mat_entry(M, 0, 0), state, ctx);
+    fq_nmod_mat_entry_rand_not_zero_buf(M, 0, 0, ctx, &buf);
+    bit_buffer_clear(&buf);
     return;
   }
 
@@ -46,7 +52,7 @@ void schubert(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
     fmpz_add(total, total, q_pow_i);
     fmpz_mul(q_pow_i, q_pow_i, q);
 
-    fmpz_randlimb_m(r, state, total);
+    fast_dice_roller(r, total, &buf);
     fmpz_zero(acc_weight);
 
     slong j = -1;
@@ -73,12 +79,12 @@ void schubert(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
       } else if (j < sigma[i] || sigma_inv[j] < i) {
         fq_nmod_zero(fq_nmod_mat_entry(Mp, i, j), ctx);
       } else {
-        fq_nmod_rand(fq_nmod_mat_entry(Mp, i, j), state, ctx);
+        fq_nmod_mat_entry_rand_buf(Mp, i, j, ctx, &buf);
       }
     }
   }
 
-  fq_nmod_mat_randtriu(B, state, 0, ctx);
+  fq_nmod_mat_randtriu_buf(B, ctx, &buf, 1);
   fq_nmod_mat_transpose(B, B, ctx);
 
   fq_nmod_mat_mul(M, B, Mp, ctx);
@@ -93,4 +99,5 @@ void schubert(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
   fmpz_clear(q);
   _perm_clear(sigma_inv);
   _perm_clear(sigma);
+  bit_buffer_clear(&buf);
 }

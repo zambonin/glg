@@ -1,9 +1,11 @@
+CHUNK_SIZE ?= $(shell getconf LONG_BIT)
 CFLAGS = -Wall -pedantic -O3 -march=native -mtune=native -Iinclude \
-		 -DCLK_SPEED=$(shell cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq)
+		 -DCLK_SPEED=$(shell cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq) \
+		 -DCHUNK_SIZE=$(CHUNK_SIZE)
 LDFLAGS = -L. -lglg -lflint
 
 COMB_OBJ = $(patsubst %.c,%.o,$(wildcard src/comb/*.c))
-UTIL_OBJ = src/util/math.o src/util/fq_nmod_mat_extra.o
+UTIL_OBJ = src/util/math.o src/util/fq_nmod_mat_extra.o src/util/rand.o
 LIB_OBJ = $(COMB_OBJ) $(UTIL_OBJ)
 LIB_TARGET = libglg.a
 

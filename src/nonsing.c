@@ -1,12 +1,13 @@
 #include "nonsing.h"
 #include "util/fq_nmod_mat_extra.h"
+#include "util/rand.h"
 
 void inner_nonsing(fq_nmod_mat_t A, fq_nmod_mat_t T, const fq_nmod_ctx_t ctx,
-                   flint_rand_t state) {
+                   bit_buffer_t *buf) {
   const slong n = fq_nmod_mat_nrows(A, ctx);
   if (n == 1) {
     fq_nmod_mat_one(A, ctx);
-    fq_nmod_mat_randtest_not_zero(T, ctx, state);
+    fq_nmod_mat_entry_rand_not_zero_buf(T, 0, 0, ctx, buf);
     return;
   }
 
@@ -16,11 +17,11 @@ void inner_nonsing(fq_nmod_mat_t A, fq_nmod_mat_t T, const fq_nmod_ctx_t ctx,
   fq_nmod_mat_t T_sub;
   fq_nmod_mat_init(T_sub, n - 1, n - 1, ctx);
 
-  inner_nonsing(A_sub, T_sub, ctx, state);
+  inner_nonsing(A_sub, T_sub, ctx, buf);
 
   fq_nmod_mat_t v;
   fq_nmod_mat_init(v, n, 1, ctx);
-  fq_nmod_mat_randtest_not_zero(v, ctx, state);
+  fq_nmod_mat_randtest_not_zero_buf(v, ctx, buf);
 
   const slong r = fq_nmod_mat_first_pos_entry(v, ctx);
 
@@ -35,7 +36,7 @@ void inner_nonsing(fq_nmod_mat_t A, fq_nmod_mat_t T, const fq_nmod_ctx_t ctx,
 
   fq_nmod_mat_t window;
   fq_nmod_mat_window_init(window, A, 1, r, n, r + 1, ctx);
-  fq_nmod_mat_randtest(window, state, ctx);
+  fq_nmod_mat_randtest_buf(window, ctx, buf);
   fq_nmod_mat_window_clear(window, ctx);
 
   fq_nmod_mat_zero(T, ctx);
@@ -59,6 +60,9 @@ void inner_nonsing(fq_nmod_mat_t A, fq_nmod_mat_t T, const fq_nmod_ctx_t ctx,
 }
 
 void nonsing(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
+  bit_buffer_t buf;
+  bit_buffer_init(&buf, state);
+
   const slong n = fq_nmod_mat_nrows(M, ctx);
   fq_nmod_mat_zero(M, ctx);
 
@@ -68,10 +72,11 @@ void nonsing(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
   fq_nmod_mat_t T;
   fq_nmod_mat_init(T, n, n, ctx);
 
-  inner_nonsing(A, T, ctx, state);
+  inner_nonsing(A, T, ctx, &buf);
 
   fq_nmod_mat_mul(M, A, T, ctx);
 
   fq_nmod_mat_clear(T, ctx);
   fq_nmod_mat_clear(A, ctx);
+  bit_buffer_clear(&buf);
 }

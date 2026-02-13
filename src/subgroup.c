@@ -1,10 +1,13 @@
 #include "subgroup.h"
 #include "util/fq_nmod_mat_extra.h"
+#include "util/rand.h"
 
-void subgroup(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
+void inner_subgroup(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx,
+                    bit_buffer_t *buf) {
   const slong n = fq_nmod_mat_nrows(M, ctx);
+
   if (n == 1) {
-    fq_nmod_randtest_not_zero(fq_nmod_mat_entry(M, 0, 0), state, ctx);
+    fq_nmod_mat_entry_rand_not_zero_buf(M, 0, 0, ctx, buf);
     return;
   }
 
@@ -34,7 +37,7 @@ void subgroup(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
   fq_nmod_t v_k_inv;
   fq_nmod_init(v_k_inv, ctx);
 
-  subgroup(M_sub, ctx, state);
+  inner_subgroup(M_sub, ctx, buf);
 
   fq_nmod_one(fq_nmod_mat_entry(Mp, 0, 0), ctx);
 
@@ -42,13 +45,13 @@ void subgroup(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
   fq_nmod_mat_set(view, M_sub, ctx);
   fq_nmod_mat_window_clear(view, ctx);
 
-  fq_nmod_randtest_not_zero(fq_nmod_mat_entry(A, 0, 0), state, ctx);
+  fq_nmod_mat_entry_rand_not_zero_buf(A, 0, 0, ctx, buf);
 
   fq_nmod_mat_window_init(view, A, 0, 1, 1, n, ctx);
-  fq_nmod_mat_randtest(view, state, ctx);
+  fq_nmod_mat_randtest_buf(view, ctx, buf);
   fq_nmod_mat_window_clear(view, ctx);
 
-  fq_nmod_mat_randtest_not_zero(v, ctx, state);
+  fq_nmod_mat_randtest_not_zero_buf(v, ctx, buf);
 
   const slong k = fq_nmod_mat_first_pos_entry(v, ctx);
   fq_nmod_inv(v_k_inv, fq_nmod_mat_entry(v, k, 0), ctx);
@@ -79,4 +82,11 @@ void subgroup(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
   fq_nmod_mat_clear(X, ctx);
   fq_nmod_mat_clear(A, ctx);
   fq_nmod_mat_clear(Mp, ctx);
+}
+
+void subgroup(fq_nmod_mat_t M, const fq_nmod_ctx_t ctx, flint_rand_t state) {
+  bit_buffer_t buf;
+  bit_buffer_init(&buf, state);
+  inner_subgroup(M, ctx, &buf);
+  bit_buffer_clear(&buf);
 }
