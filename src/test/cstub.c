@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-static const char fmt[] = ", limb = %8.2Lf";
+static const char fmt[] = ", limb = %8.2Lf, chunk = %3d";
 static long double *count;
 
 void reset_cnt(void) {
@@ -19,7 +19,7 @@ void norm_cnt(uint32_t i) {
 
 void print_cnt(void) {
   if (count) {
-    printf(fmt, *count);
+    printf(fmt, *count, CHUNK_SIZE);
   }
 }
 

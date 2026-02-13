@@ -1,47 +1,27 @@
 #!/usr/bin/env sh
 
-function pprint() {
+function pprint_cycles() {
   mlr \
     --opprint \
     clean-whitespace \
-    then cut -f p,d,n,alg,"$1" \
-    then reshape -s alg,"$1" \
-    then put '
-      var min_val = "";
-      for (k, v in $*) {
-        if (k != "p" && k != "d" && k != "n" && is_numeric(v)) {
-          if (min_val == "") {
-            min_val = v;
-          } else {
-            min_val = min(min_val, v);
-          }
-        }
-      }
-
-      if (min_val != "") {
-        var new_record = {"p": $p, "d": $d, "n": $n};
-
-        for (k, v in $*) {
-          if (k != "p" && k != "d" && k != "n" && is_numeric(v)) {
-            new_record[k] = v;
-            new_record[k . "_ratio"]
-              = (v == min_val ? "*" : fmtnum(v / min_val, "%.2f"));
-          }
-        }
-        $* = new_record;
-      }
-    ' "$2"
-}
-
-function pprint_cycles() {
-  pprint avg_cycles "$1"
+    then put '$q = $p**$d' \
+    then cut -o -f n,q,alg,avg_cycles \
+    then sort -n n \
+    then reshape -s alg,avg_cycles /dev/stdin
 }
 
 function pprint_limbs() {
-  pprint limb "$1"
+  mlr \
+    --opprint \
+    clean-whitespace \
+    then put '$q = $p**$d' \
+    then cut -o -f n,q,chunk,alg,limb \
+    then sort -n n \
+    then filter '$chunk == 1 || $chunk == 4 || $chunk == 16 || $chunk == 64' \
+    then filter '$n == 5 || $n == 11 || $n == 30' \
+    then reshape -s alg,limb /dev/stdin
 }
 
-INPUT="/dev/stdin"
 OPTION=
 
 while getopts clf:-: OPT ; do
@@ -52,7 +32,6 @@ while getopts clf:-: OPT ; do
   fi
   case "$OPT" in
     c | cycles ) OPTION="cycles" ;;
-    f | file ) INPUT="${OPTARG:-$INPUT}" ;;
     l | limbs ) OPTION="limbs" ;;
     ??* ) exit 1 ;;
     \? ) exit 2 ;;
@@ -60,17 +39,20 @@ while getopts clf:-: OPT ; do
 done
 shift $((OPTIND - 1))
 
-if [ -z "$OPTION" ] || [ ! -r "$INPUT" ] ; then
+if [ -z "$OPTION" ] ; then
   cat <<-EOF
 Usage: sh ${0##*/} [options]
   -c,  --cycles
-  -f,  --file=<path>
   -l,  --limbs
 EOF
   exit 1
 fi
 
 case "$OPTION" in
-  cycles ) pprint_cycles "$INPUT" ;;
-  limbs ) pprint_limbs "$INPUT" ;;
+  cycles )
+    make --silent clean prof-c | pprint_cycles ;;
+  limbs )
+    for i in 1 4 16 64 ; do
+      make CHUNK_SIZE="$i" --silent clean prof-c
+    done | pprint_limbs ;;
 esac
