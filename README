@@ -31,6 +31,9 @@
 │      A novel algorithm based on combinatorial ranking which requires       │
 │      only a single integer sampled uniformly at random.                    │
 │                                                                            │
+│    gs                                                                      │
+│      An inlined version of `unrank` based on Gram-Schmidt.                 │
+│                                                                            │
 └────────────────────────────────────────────────────────────────────────────┘
 
 ┌─ Usage ────────────────────────────────────────────────────────────────────┐

@@ -9,7 +9,7 @@ UTIL_OBJ = src/util/math.o src/util/fq_nmod_mat_extra.o src/util/rand.o
 LIB_OBJ = $(COMB_OBJ) $(UTIL_OBJ)
 LIB_TARGET = libglg.a
 
-STRAT = bruhat nonsing rej schubert subgroup unrank
+STRAT = bruhat nonsing rej schubert subgroup unrank gs
 SRC = $(patsubst %,src/test/t-%.c,$(STRAT))
 TARGETS = $(basename $(SRC))
 
